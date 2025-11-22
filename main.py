@@ -425,7 +425,7 @@ class QuizApp:
                 })
 
             rng.shuffle(opts)
-            entry = {"Question": f"\"{target[meaning_col]}\""}
+            entry = {"Question": f"{target[meaning_col]}"}
             mapping = ["A", "B", "C", "D"]
             for idx, d in enumerate(opts):
                 L = mapping[idx]
@@ -506,7 +506,7 @@ class QuizApp:
 
             # detailed definitions with improved readability (larger weight/size for meaning)
             for opt in ["A", "B", "C", "D"]:
-                marker = "✅" if opt == correct_L else ("❌" if opt == saved else "➡")
+                marker = "✅" if opt == correct_L else ("➡" if opt == saved else "➡")
                 option_row = ft.Row([
                     ft.Text(f"{opt}:", width=26),
                     ft.Text(row[f'Option {opt}'], weight=ft.FontWeight.BOLD),
