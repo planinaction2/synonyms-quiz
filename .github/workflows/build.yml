@@ -1,0 +1,50 @@
+name: Build APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    # NEW: Setup Java (Required for Android builds on Linux)
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+        
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flet openpyxl pandas
+        
+    - name: Build APK
+      run: |
+        flet build apk --verbose
+        
+    # DEBUG: List all files to verify APK exists
+    - name: List files (Debug)
+      run: find . -name "*.apk"
+        
+    # FIX: Use wildcard pattern to find the APK anywhere
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: synonyms-quiz-apk
+        path: "**/*.apk"
